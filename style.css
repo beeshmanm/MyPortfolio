@@ -356,7 +356,7 @@ body::before {
 /* Stitching around the edge of the whole page, like a notebook cover */
 body::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 14px;
   z-index: 5;
   border: 2px dashed var(--thread);
@@ -532,5 +532,4 @@ body::after {
 .about-grid {
   filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.55));
 }
-
-/* Each page sits at a slightly different angle */
+body { position: relative; }
