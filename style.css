@@ -416,3 +416,121 @@ body::after {
 @media (max-width: 768px) {
   body::after { inset: 8px; border-radius: 12px; }
 }
+/* ============================================================
+   PAPER PANELS: cream paper laid on the leather cover
+   ============================================================ */
+:root {
+  --paper: #FFFFFF;
+  --paper-ink: #2b2620;
+  --paper-line: rgba(60, 45, 30, 0.3);
+}
+
+.glass {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.2 0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(120, 90, 50, 0.06)),
+    var(--paper);
+  color: var(--paper-ink);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 1px solid var(--paper-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 6px 14px rgba(0, 0, 0, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Stitching on the paper: a darker thread so it shows up */
+.card::after { border-color: rgba(60, 45, 30, 0.35); }
+
+/* Nav pills and buttons: dark text on paper */
+.nav-links a:hover,
+.btn:hover { color: #8a3b2a; }
+.nav-links a[aria-current="page"]::after { background: var(--paper-ink); }
+
+.btn.glass {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(120, 90, 50, 0.08)),
+    #e6dcc3;
+  border-color: var(--paper-line);
+  box-shadow: 0 2px 0 rgba(60, 45, 30, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Skill chips and preview boxes */
+.chips li {
+  background: rgba(60, 45, 30, 0.08);
+  border-color: var(--paper-line);
+}
+.thumb {
+  background: rgba(60, 45, 30, 0.08);
+  border-color: var(--paper-line);
+  color: #5a4e3f;
+  box-shadow: inset 0 2px 5px rgba(60, 45, 30, 0.2);
+}
+/* ============================================================
+   NOTEBOOK RULING: a line under every line of text
+   ============================================================ */
+:root {
+  --line-h: 2rem;                      /* height of each ruled line */
+  --rule: rgba(0,0, 0, 0.35);    /* blue pen colour */
+}
+
+.card :is(p, h2, h3, .steps li, .links li) {
+  line-height: var(--line-h);
+  margin: 0;
+  max-width: none;
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(var(--line-h) - 1px),
+    var(--rule) calc(var(--line-h) - 1px)
+  );
+  background-size: 100% var(--line-h);
+  background-repeat: repeat-y;
+}
+
+/* Remove gaps so the lines continue without breaks */
+.steps, .links { gap: 0; }
+.steps strong { line-height: var(--line-h); }
+/* ============================================================
+   TORN NOTEBOOK PAGES
+   ============================================================ */
+.card {
+  border: none;
+  box-shadow: none;                       /* a shadow would be clipped, see below */
+  padding-left: clamp(30px, 4vw, 46px);   /* room for the punched holes */
+
+  /* Ragged top and bottom edges. x is a percentage so it stretches with the card,
+     y is in pixels so the tears stay the same depth on every card. */
+  clip-path: polygon(
+    0 6px, 3% 1px, 6% 7px, 9% 3px, 13% 8px, 17% 2px, 21% 6px, 26% 0, 30% 5px,
+    35% 9px, 39% 3px, 44% 7px, 48% 1px, 53% 6px, 58% 2px, 62% 8px, 67% 4px,
+    72% 9px, 76% 2px, 81% 7px, 86% 3px, 90% 8px, 95% 1px, 100% 5px,
+    100% calc(100% - 4px), 96% calc(100% - 9px), 92% calc(100% - 2px),
+    87% calc(100% - 7px), 82% calc(100% - 1px), 77% calc(100% - 8px),
+    72% calc(100% - 3px), 66% calc(100% - 9px), 61% calc(100% - 2px),
+    56% calc(100% - 6px), 51% 100%, 45% calc(100% - 7px), 40% calc(100% - 2px),
+    34% calc(100% - 8px), 29% calc(100% - 3px), 23% calc(100% - 9px),
+    18% calc(100% - 1px), 12% calc(100% - 6px), 6% calc(100% - 2px),
+    0 calc(100% - 7px)
+  );
+
+  /* Half-circle holes punched into the left edge every 28px */
+  -webkit-mask-image: radial-gradient(circle at 0 14px, transparent 6px, #000 6.5px);
+  mask-image: radial-gradient(circle at 0 14px, transparent 6px, #000 6.5px);
+  -webkit-mask-size: 100% 28px;
+  mask-size: 100% 28px;
+  -webkit-mask-repeat: repeat-y;
+  mask-repeat: repeat-y;
+}
+
+/* Stitching doesn't belong on a torn page */
+.card::after { display: none; }
+
+/* Shadow goes on the containers, because clip-path cuts off a shadow
+   set on the card itself */
+.projects,
+.about-grid {
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.55));
+}
+
+/* Each page sits at a slightly different angle */
